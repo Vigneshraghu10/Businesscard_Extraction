@@ -1,0 +1,8 @@
+Flask
+Flask-Cors
+requests
+pandas
+Werkzeug
+google-generativeai
+Pillow
+tqdm
