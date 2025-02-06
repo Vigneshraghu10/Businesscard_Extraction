@@ -6,3 +6,4 @@ Werkzeug
 google-generativeai
 Pillow
 tqdm
+gunicorn
