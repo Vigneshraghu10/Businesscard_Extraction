@@ -438,84 +438,96 @@
                     setTimeout(() => rows[index].classList.remove('bg-green-50'), 2000);
                 }
             }
-            async function uploadFiles() {
-                if (files.length === 0) {
-                    alert('Please select files to upload');
-                    return;
-                }
+            const getBackendUrl = () => {
+    // Check if we're in development or production
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:5000';
+    }
+    // Replace this URL with your Render backend URL
+    return 'https://stpl-businesscard-extraction.onrender.com';
+};
 
-                uploadBtn.disabled = true;
-                uploadBtn.innerHTML = `<i class="fas fa-spinner loading-spinner mr-2"></i>Uploading...`;
-                progressContainer.classList.remove('hidden');
+// Modify your existing uploadFiles function
+async function uploadFiles() {
+    if (files.length === 0) {
+        alert('Please select files to upload');
+        return;
+    }
 
-                try {
-                    // Test server connection
-                    try {
-                        const testResponse = await fetch('http://localhost:5000/test');
-                        if (!testResponse.ok) throw new Error('Backend server test failed');
-                    } catch (error) {
-                        throw new Error('Cannot connect to backend server. Please ensure it is running on http://localhost:5000');
-                    }
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = `<i class="fas fa-spinner loading-spinner mr-2"></i>Uploading...`;
+    progressContainer.classList.remove('hidden');
 
-                    const formData = new FormData();
-                    files.forEach(file => {
-                        formData.append('files', file);
-                    });
+    try {
+        const backendUrl = getBackendUrl();
+        
+        // Test server connection
+        try {
+            const testResponse = await fetch(`${backendUrl}/test`);
+            if (!testResponse.ok) throw new Error('Backend server test failed');
+        } catch (error) {
+            throw new Error(`Cannot connect to backend server at ${backendUrl}. Please check server status.`);
+        }
 
-                    // Simulate progress
-                    let progress = 0;
-                    const interval = setInterval(() => {
-                        progress += 5
-                        if (progress <= 90) {
-                            progressBar.style.width = `${progress}%`;
-                            progressText.textContent = `${progress}%`;
-                        }
-                    }, 200);
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('files', file);
+        });
 
-                    const response = await fetch('http://localhost:5000/upload', {
-                        method: 'POST',
-                        body: formData,
-                        mode: 'cors'
-                    });
-
-                    clearInterval(interval);
-                    progressBar.style.width = '100%';
-                    progressText.textContent = '100%';
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    console.log('Server response:', result);
-
-                    if (result.status === 'success') {
-                        // Add base64 images to the extracted data
-                        result.data = result.data.map((item, index) => ({
-                            ...item,
-                            image: files[index].base64,
-                            processing_status: 'success'
-                        }));
-
-                        extractedData = [...extractedData, ...result.data];
-                        displayResults();
-                        updateSidebar();
-                        resetUpload();
-                        alert('Files processed successfully!');
-                    } else {
-                        throw new Error(result.message || 'Processing failed');
-                    }
-
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    alert('Error processing files: ' + error.message);
-                } finally {
-                    uploadBtn.disabled = false;
-                    uploadBtn.innerHTML = `<i class="fas fa-upload mr-2"></i>Upload Files`;
-                    progressContainer.classList.add('hidden');
-                }
+        // Simulate progress
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 5
+            if (progress <= 90) {
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${progress}%`;
             }
+        }, 200);
+
+        const response = await fetch(`${backendUrl}/upload`, {
+            method: 'POST',
+            body: formData,
+            mode: 'cors'
+        });
+
+        clearInterval(interval);
+        progressBar.style.width = '100%';
+        progressText.textContent = '100%';
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);
+
+        if (result.status === 'success') {
+            // Add base64 images to the extracted data
+            result.data = result.data.map((item, index) => ({
+                ...item,
+                image: files[index].base64,
+                processing_status: 'success'
+            }));
+
+            extractedData = [...extractedData, ...result.data];
+            displayResults();
+            updateSidebar();
+            resetUpload();
+            alert('Files processed successfully!');
+        } else {
+            throw new Error(result.message || 'Processing failed');
+        }
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        alert('Error processing files: ' + error.message);
+    } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = `<i class="fas fa-upload mr-2"></i>Upload Files`;
+        progressContainer.classList.add('hidden');
+    }
+}
 
 
             async function readFileAsBase64(file) {

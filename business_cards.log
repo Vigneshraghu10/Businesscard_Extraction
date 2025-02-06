@@ -10,3 +10,80 @@
 2025-02-06 13:05:57,803 - INFO - 127.0.0.1 - - [06/Feb/2025 13:05:57] "GET /test HTTP/1.1" 200 -
 2025-02-06 13:07:42,518 - INFO - 127.0.0.1 - - [06/Feb/2025 13:07:42] "POST /upload HTTP/1.1" 200 -
 2025-02-06 13:08:38,583 - INFO - 127.0.0.1 - - [06/Feb/2025 13:08:38] "GET /test HTTP/1.1" 200 -
+2025-02-06 15:52:18,099 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.157.185.69:5000
+2025-02-06 15:52:18,102 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-06 15:52:18,109 - INFO -  * Restarting with stat
+2025-02-06 15:52:19,494 - WARNING -  * Debugger is active!
+2025-02-06 15:52:19,507 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 15:53:26,168 - INFO - 127.0.0.1 - - [06/Feb/2025 15:53:26] "GET / HTTP/1.1" 200 -
+2025-02-06 15:53:34,066 - INFO - 127.0.0.1 - - [06/Feb/2025 15:53:34] "GET /test HTTP/1.1" 200 -
+2025-02-06 15:53:42,190 - INFO - 127.0.0.1 - - [06/Feb/2025 15:53:42] "POST /upload HTTP/1.1" 200 -
+2025-02-06 15:54:37,465 - INFO - 127.0.0.1 - - [06/Feb/2025 15:54:37] "OPTIONS /test HTTP/1.1" 200 -
+2025-02-06 15:54:37,711 - INFO - 127.0.0.1 - - [06/Feb/2025 15:54:37] "GET /test HTTP/1.1" 200 -
+2025-02-06 15:54:37,779 - INFO - 127.0.0.1 - - [06/Feb/2025 15:54:37] "OPTIONS /upload HTTP/1.1" 200 -
+2025-02-06 15:54:43,704 - INFO - 127.0.0.1 - - [06/Feb/2025 15:54:43] "POST /upload HTTP/1.1" 200 -
+2025-02-06 15:57:11,591 - INFO - 127.0.0.1 - - [06/Feb/2025 15:57:11] "GET / HTTP/1.1" 200 -
+2025-02-06 15:57:24,858 - INFO - 127.0.0.1 - - [06/Feb/2025 15:57:24] "OPTIONS /test HTTP/1.1" 200 -
+2025-02-06 15:57:25,125 - INFO - 127.0.0.1 - - [06/Feb/2025 15:57:25] "GET /test HTTP/1.1" 200 -
+2025-02-06 15:57:25,188 - INFO - 127.0.0.1 - - [06/Feb/2025 15:57:25] "OPTIONS /upload HTTP/1.1" 200 -
+2025-02-06 16:17:40,148 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.157.185.69:5000
+2025-02-06 16:17:40,148 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-06 16:17:40,153 - INFO -  * Restarting with stat
+2025-02-06 16:17:41,637 - WARNING -  * Debugger is active!
+2025-02-06 16:17:41,649 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 16:17:44,899 - INFO - 127.0.0.1 - - [06/Feb/2025 16:17:44] "GET / HTTP/1.1" 200 -
+2025-02-06 16:17:53,754 - INFO - 127.0.0.1 - - [06/Feb/2025 16:17:53] "GET /test HTTP/1.1" 200 -
+2025-02-06 16:19:43,986 - INFO - 127.0.0.1 - - [06/Feb/2025 16:19:43] "POST /upload HTTP/1.1" 200 -
+2025-02-06 16:37:38,355 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.157.185.69:5000
+2025-02-06 16:37:38,358 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-06 16:37:38,361 - INFO -  * Restarting with stat
+2025-02-06 16:37:39,267 - WARNING -  * Debugger is active!
+2025-02-06 16:37:39,270 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 16:37:42,296 - INFO - 127.0.0.1 - - [06/Feb/2025 16:37:42] "GET / HTTP/1.1" 200 -
+2025-02-06 16:37:49,150 - INFO - 127.0.0.1 - - [06/Feb/2025 16:37:49] "GET /test HTTP/1.1" 200 -
+2025-02-06 16:38:42,958 - ERROR - Gemini processing failed for uploads\WhatsApp_Image_2025-02-04_at_11.45.01.jpeg: 429 Resource has been exhausted (e.g. check quota).
+2025-02-06 16:38:44,707 - INFO - 127.0.0.1 - - [06/Feb/2025 16:38:44] "POST /upload HTTP/1.1" 200 -
+2025-02-06 16:40:20,338 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.157.185.69:5000
+2025-02-06 16:40:20,338 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-06 16:40:20,338 - INFO -  * Restarting with stat
+2025-02-06 16:40:21,499 - WARNING -  * Debugger is active!
+2025-02-06 16:40:21,504 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 16:40:32,741 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.157.185.69:5000
+2025-02-06 16:40:32,741 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-06 16:40:32,744 - INFO -  * Restarting with stat
+2025-02-06 16:40:33,638 - WARNING -  * Debugger is active!
+2025-02-06 16:40:33,638 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 16:40:39,847 - INFO - 10.157.185.69 - - [06/Feb/2025 16:40:39] "GET / HTTP/1.1" 200 -
+2025-02-06 16:40:40,520 - INFO - 10.157.185.69 - - [06/Feb/2025 16:40:40] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-02-06 16:41:15,998 - INFO - 127.0.0.1 - - [06/Feb/2025 16:41:15] "GET / HTTP/1.1" 200 -
+2025-02-06 16:41:24,453 - INFO - 127.0.0.1 - - [06/Feb/2025 16:41:24] "GET /test HTTP/1.1" 200 -
+2025-02-06 16:42:01,443 - INFO -  * Detected change in 'C:\\Users\\SASMITHA V\\Downloads\\Businesscard_git\\app.py', reloading
+2025-02-06 16:42:01,686 - INFO -  * Restarting with stat
+2025-02-06 16:42:03,223 - WARNING -  * Debugger is active!
+2025-02-06 16:42:03,223 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 16:42:06,769 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.157.185.69:5000
+2025-02-06 16:42:06,769 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-06 16:42:06,773 - INFO -  * Restarting with stat
+2025-02-06 16:42:07,758 - WARNING -  * Debugger is active!
+2025-02-06 16:42:07,761 - INFO -  * Debugger PIN: 905-842-787
+2025-02-06 16:42:10,755 - INFO - 127.0.0.1 - - [06/Feb/2025 16:42:10] "GET / HTTP/1.1" 200 -
+2025-02-06 16:42:19,686 - INFO - 127.0.0.1 - - [06/Feb/2025 16:42:19] "GET /test HTTP/1.1" 200 -
+2025-02-06 16:43:39,556 - INFO - 127.0.0.1 - - [06/Feb/2025 16:43:39] "POST /upload HTTP/1.1" 200 -
