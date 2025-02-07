@@ -7,3 +7,4 @@ google-generativeai
 Pillow
 tqdm
 gunicorn
+aiohttp

@@ -156,7 +156,7 @@
                     <span class="text-sm font-medium text-gray-700">Processing...</span>
                     <span id="progress-text" class="text-sm text-gray-600">0%</span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="relative h-2.5 bg-gray-200 rounded-full">
                     <div id="progress-bar" class="progress-bar bg-green-500 h-2.5 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
@@ -193,8 +193,10 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Designation</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">website</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">address</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">status</th>
+                           
                         </tr>
                     </thead>
                     <tbody id="results-body" class="bg-white divide-y divide-gray-200"></tbody>
@@ -228,10 +230,17 @@
                     <label class="block text-sm font-medium text-gray-700">Phone</label>
                     <input type="tel" name="contact_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">website</label>
+                    <input type="tel" name="contact_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">address</label>
+                    <input type="tel" name="contact_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                </div>
                 <div class="flex justify-end space-x-4 mt-6">
-                    <button type="button" id="cancel-edit" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition-colors">
+                    <button id="cancel-edit" type="button" class="text-gray-500 hover:text-gray-700 transition-colors">
                         Cancel
-                    </button>
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
                         Save Changes
                     </button>
@@ -262,7 +271,14 @@
             const editForm = document.getElementById('edit-form');
             const cancelEditBtn = document.getElementById('cancel-edit');
             let currentEditIndex = null;
-
+            const resultsTable = document.getElementById('results-table');
+        resultsTable.addEventListener('click', function(e) {
+            const deleteBtn = e.target.closest('.delete-btn');
+            if (deleteBtn) {
+                const index = parseInt(deleteBtn.dataset.index);
+                deleteRow(index);
+            }
+        });
             let files = [];
             let extractedData = [];
             let hasUnsavedChanges = false;
@@ -408,23 +424,41 @@
             }
 
             function updateSidebar() {
-                if (extractedData.length > 0) {
-                    imageSidebar.classList.remove('hidden');
-                    sidebarImages.innerHTML = '';
+    // Ensure extractedData is defined and not empty
+    if (!Array.isArray(extractedData) || extractedData.length === 0) {
+        imageSidebar.classList.add('hidden');
+        return;
+    }
 
-                    extractedData.forEach((data, index) => {
-                        const imageContainer = document.createElement('div');
-                        imageContainer.className = `sidebar-image-container p-2 cursor-pointer rounded-lg mb-4 ${selectedImageIndex === index ? 'selected-image' : ''}`;
-                        imageContainer.innerHTML = `
-                            <img src="${data.image}" alt="Business Card ${index + 1}" class="w-full h-32 object-cover rounded-lg mb-2">
-                            <p class="text-sm font-medium text-gray-800 truncate">${data.person_name || 'Unnamed'}</p>
-                            <p class="text-xs text-gray-500 truncate">${data.company_name || 'No Company'}</p>
-                        `;
-                        imageContainer.addEventListener('click', () => selectImage(index));
-                        sidebarImages.appendChild(imageContainer);
-                    });
-                }
-            }
+    imageSidebar.classList.remove('hidden');
+    sidebarImages.innerHTML = ''; // Clear existing content
+
+    extractedData.forEach((data, index) => {
+        const imageContainer = document.createElement('div');
+        imageContainer.className = `sidebar-image-container p-2 cursor-pointer rounded-lg mb-4 ${
+            selectedImageIndex === index ? 'selected-image' : ''
+        }`;
+
+        // Ensure image is valid, provide fallback if missing
+        const imageUrl = data.image ? data.image : 'default-placeholder.png';
+
+        imageContainer.innerHTML = `
+            <img src="${imageUrl}" alt="Business Card ${index + 1}" 
+                 class="w-full h-32 object-cover rounded-lg mb-2">
+            <p class="text-sm font-medium text-gray-800 truncate">${data.person_name || 'Unnamed'}</p>
+            <p class="text-xs text-gray-500 truncate">${data.company_name || 'No Company'}</p>
+        `;
+
+        // Attach click event listener to update selected image
+        imageContainer.addEventListener('click', () => {
+            selectImage(index);
+            updateSidebar(); // Refresh to apply selection class
+        });
+
+        sidebarImages.appendChild(imageContainer);
+    });
+}
+
 
             function selectImage(index) {
                 selectedImageIndex = index;
@@ -544,53 +578,65 @@ async function uploadFiles() {
                 resultsBody.innerHTML = '';
 
                 extractedData.forEach((data, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="person_name" data-index="${index}">
-                            <div class="flex items-center">
-                                <img class="h-8 w-8 rounded-full mr-3" src="${data.image}" alt="Business Card">
-                                <span class="editable-content">${data.person_name || '-'}</span>
-                                <div class="edit-overlay">
-                                    <i class="fas fa-pen text-blue-500"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="company_name" data-index="${index}">
-                            <span class="editable-content">${data.company_name || '-'}</span>
-                            <div class="edit-overlay">
-                                <i class="fas fa-pen text-blue-500"></i>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="designation" data-index="${index}">
-                            <span class="editable-content">${data.designation || '-'}</span>
-                            <div class="edit-overlay">
-                                <i class="fas fa-pen text-blue-500"></i>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="email" data-index="${index}">
-                            <span class="editable-content">${data.email || '-'}</span>
-                            <div class="edit-overlay">
-                                <i class="fas fa-pen text-blue-500"></i>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="contact_number" data-index="${index}">
-                            <span class="editable-content">${data.contact_number || '-'}</span>
-                            <div class="edit-overlay">
-                                <i class="fas fa-pen text-blue-500"></i>
-                            </div>
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="person_name" data-index="${index}">
+            <div class="flex items-center">
+                <img class="h-8 w-8 rounded-full mr-3" src="${data.image}" alt="Business Card">
+                <span class="editable-content">${data.person_name || '-'}</span>
+                <div class="edit-overlay">
+                    <i class="fas fa-pen text-blue-500"></i>
+                </div>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="company_name" data-index="${index}">
+            <span class="editable-content">${data.company_name || '-'}</span>
+            <div class="edit-overlay">
+                <i class="fas fa-pen text-blue-500"></i>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="designation" data-index="${index}">
+            <span class="editable-content">${data.designation || '-'}</span>
+            <div class="edit-overlay">
+                <i class="fas fa-pen text-blue-500"></i>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="email" data-index="${index}">
+            <span class="editable-content">${data.email || '-'}</span>
+            <div class="edit-overlay">
+                <i class="fas fa-pen text-blue-500"></i>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="contact_number" data-index="${index}">
+            <span class="editable-content">${data.contact_number || '-'}</span>
+            <div class="edit-overlay">
+                <i class="fas fa-pen text-blue-500"></i>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="website" data-index="${index}">
+            <span class="editable-content">${data.website || '-'}</span>
+            <div class="edit-overlay">
+                <i class="fas fa-pen text-blue-500"></i>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap editable-cell" data-field="address" data-index="${index}">
+            <span class="editable-content">${data.address || '-'}</span>
+            <div class="edit-overlay">
+                <i class="fas fa-pen text-blue-500"></i>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                data.processing_status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }">
+                ${data.processing_status || 'Unknown'}
+                           </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                data.processing_status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }">
-                                ${data.processing_status || 'Unknown'}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex space-x-2">
-                                <button data-index="${index}" class="delete-btn text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                        <div class="flex space-x-2">
+                            <button class="delete-btn text-red-600 hover:text-red-900 transition-colors duration-200" data-index="${index}">
+                                <i class="fas fa-trash"></i>
+                            </button>
                             </div>
                         </td>
                     `;
@@ -652,19 +698,23 @@ async function uploadFiles() {
             }
 
             function deleteRow(index) {
-                if (confirm('Are you sure you want to delete this record?')) {
-                    extractedData.splice(index, 1);
-                    if (selectedImageIndex === index) {
-                        selectedImageIndex = null;
-                    } else if (selectedImageIndex > index) {
-                        selectedImageIndex--;
-                    }
-                    displayResults();
-                    updateSidebar();
-                    hasUnsavedChanges = true;
+            if (confirm('Are you sure you want to delete this record?')) {
+                extractedData.splice(index, 1);
+                if (selectedImageIndex === index) {
+                    selectedImageIndex = null;
+                } else if (selectedImageIndex > index) {
+                    selectedImageIndex--;
+                }
+                displayResults();
+                updateSidebar();
+                hasUnsavedChanges = true;
+
+                // If no more data, hide the results section
+                if (extractedData.length === 0) {
+                    resultsSection.classList.add('hidden');
                 }
             }
-
+        }
             async function saveChanges() {
                 try {
                     saveAllBtn.disabled = true;
@@ -701,13 +751,15 @@ async function uploadFiles() {
             }
 
             function generateCsv() {
-                const headers = ['Name', 'Company', 'Designation', 'Email', 'Phone', 'Status'];
+                const headers = ['Name', 'Company', 'Designation', 'Email', 'Phone','website','address', 'Status'];
                 const rows = extractedData.map(data => [
                     data.person_name,
                     data.company_name,
                     data.designation,
                     data.email,
                     data.contact_number,
+                    data.website,
+                    data.address,
                     data.processing_status
                 ].map(field => `"${(field || '').replace(/"/g, '""')}"`).join(','));
                 
@@ -715,28 +767,23 @@ async function uploadFiles() {
             }
 
             async function clearAll() {
-                if (!confirm('Are you sure you want to clear all data? This cannot be undone.')) return;
+    if (!confirm('Are you sure you want to clear all data? This cannot be undone.')) return;
 
-                try {
-                    clearAllBtn.disabled = true;
-                    clearAllBtn.innerHTML = `<i class="fas fa-spinner loading-spinner mr-2"></i>Clearing...`;
+    try {
+        clearAllBtn.disabled = true;
+        clearAllBtn.innerHTML = `<i class="fas fa-spinner loading-spinner mr-2"></i>Clearing...`;
 
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-                    files = [];
-                    extractedData = [];
-                    selectedImageIndex = null;
-                    resetUpload();
-                    resultsSection.classList.add('hidden');
-                    imageSidebar.classList.add('hidden');
-                    hasUnsavedChanges = false;
-                } catch (error) {
-                    alert('Error clearing data: ' + error.message);
-                } finally {
-                    clearAllBtn.disabled = false;
-                    clearAllBtn.innerHTML = `<i class="fas fa-trash mr-2"></i>Clear All`;
-                }
-            }
+        // Refresh the entire page
+        location.reload();
+    } catch (error) {
+        alert('Error clearing data: ' + error.message);
+    } finally {
+        clearAllBtn.disabled = false;
+        clearAllBtn.innerHTML = `<i class="fas fa-trash mr-2"></i>Clear All`;
+    }
+}
 
             function resetUpload() {
                 files = [];
